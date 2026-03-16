@@ -5,331 +5,550 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Jarrah</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
 
     body {
+      background: #04040a;
+      color: #e2e2ea;
+      font-family: 'Inter', sans-serif;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+
+    a { color: inherit; text-decoration: none; }
+    img { max-width: 100%; display: block; border-radius: 12px; }
+
+    /* grid bg */
+    .grid-bg {
+      position: fixed; inset: 0; z-index: 0; pointer-events: none;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+      background-size: 64px 64px;
+    }
+
+    /* glow orbs */
+    .orb {
+      position: fixed; border-radius: 50%;
+      pointer-events: none; z-index: 0;
+      filter: blur(80px); opacity: 0.35;
+    }
+    .orb1 { width: 500px; height: 500px; top: -100px; left: -100px; }
+    .orb2 { width: 400px; height: 400px; bottom: -80px; right: -80px; }
+
+    /* nav */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1.1rem 3rem;
+      background: rgba(4,4,10,0.75);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+    .nav-logo { font-size: 1rem; font-weight: 600; letter-spacing: -0.3px; }
+    .nav-logo span { opacity: 0.4; }
+    .nav-links { display: flex; gap: 2.5rem; font-size: 0.83rem; color: rgba(255,255,255,0.4); }
+    .nav-links a:hover { color: #fff; transition: color 0.2s; }
+    .nav-cta {
+      padding: 0.45rem 1.1rem; border-radius: 8px;
+      font-size: 0.82rem; font-weight: 500;
+      border: 1px solid rgba(255,255,255,0.12);
+      color: rgba(255,255,255,0.75);
+      transition: background 0.2s, border-color 0.2s;
+    }
+    .nav-cta:hover { background: rgba(255,255,255,0.06); border-color: rgba(255,255,255,0.2); }
+
+    /* sections */
+    section, .hero { position: relative; z-index: 1; }
+
+    /* hero */
+    .hero {
       min-height: 100vh;
-      background: #000;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-family: 'DM Sans', sans-serif;
-      overflow: hidden;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      text-align: center;
+      padding: 8rem 2rem 4rem;
     }
-
-    /* background video */
-    #bg-video {
-      position: fixed; inset: 0;
-      width: 100%; height: 100%;
-      object-fit: cover;
-      z-index: 0;
-      pointer-events: none;
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 0.35rem 1rem; border-radius: 99px;
+      font-size: 0.75rem; font-weight: 500;
+      border: 1px solid rgba(255,255,255,0.1);
+      background: rgba(255,255,255,0.04);
+      color: rgba(255,255,255,0.55);
+      margin-bottom: 2rem;
+      opacity: 0; animation: fadeUp 0.6s 0.1s forwards;
     }
-    #bg-overlay {
-      position: fixed; inset: 0;
-      z-index: 1;
-      pointer-events: none;
+    .badge-dot { width: 6px; height: 6px; border-radius: 50%; }
+    .hero h1 {
+      font-size: clamp(2.8rem, 8vw, 6.5rem);
+      font-weight: 700;
+      letter-spacing: -3px;
+      line-height: 1.05;
+      margin-bottom: 1.5rem;
+      opacity: 0; animation: fadeUp 0.6s 0.25s forwards;
     }
-
-    /* splash */
-    #splash {
-      position: fixed; inset: 0;
-      z-index: 10;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      transition: opacity 0.6s ease, visibility 0.6s ease;
-    }
-    #splash.hidden {
-      opacity: 0;
-      visibility: hidden;
-      pointer-events: none;
-    }
-    #splash-text {
-      font-family: 'Syne', sans-serif;
-      font-weight: 800;
-      letter-spacing: -1px;
-      color: #fff;
-      animation: pulse 2s ease-in-out infinite;
-      user-select: none;
-    }
-    @keyframes pulse {
-      0%, 100% { opacity: 1;   transform: scale(1);    }
-      50%       { opacity: 0.4; transform: scale(0.96); }
-    }
-
-    /* card wrapper */
-    #card-wrap {
+    .hero h1 .static { color: #fff; }
+    .hero h1 .cycle-wrap {
+      display: inline-block;
       position: relative;
-      z-index: 2;
-      opacity: 0;
-      transform: translateY(28px);
-      transition: opacity 0.7s ease, transform 0.7s ease;
-      pointer-events: none;
+      height: 1.1em;
+      overflow: hidden;
+      vertical-align: bottom;
+      min-width: 2ch;
     }
-    #card-wrap.visible {
+    .cycle-word {
+      display: block;
+      position: absolute;
+      left: 0; right: 0;
+      opacity: 0;
+      transform: translateY(40px);
+      transition: opacity 0.45s ease, transform 0.45s ease;
+      text-align: center;
+    }
+    .cycle-word.active {
       opacity: 1;
       transform: translateY(0);
-      pointer-events: auto;
     }
-
-    /* 3d card */
-    .scene { perspective: 900px; }
-    .card {
-      width: 340px;
-      border-radius: 22px;
-      padding: 2rem;
-      position: relative;
-      transform-style: preserve-3d;
-      transition: transform 0.08s ease, box-shadow 0.08s ease;
-      cursor: default;
-      overflow: hidden;
-    }
-    .shine {
-      position: absolute; inset: 0;
-      border-radius: 22px;
-      pointer-events: none;
+    .cycle-word.exit {
       opacity: 0;
-      transition: opacity 0.1s;
+      transform: translateY(-40px);
     }
-    .card-body {
-      transform: translateZ(28px);
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-      position: relative;
+    .hero-sub {
+      font-size: clamp(0.95rem, 2vw, 1.1rem);
+      color: rgba(255,255,255,0.4);
+      max-width: 520px;
+      line-height: 1.7;
+      margin-bottom: 2.5rem;
+      opacity: 0; animation: fadeUp 0.6s 0.4s forwards;
     }
-    .avatar {
-      width: 62px; height: 62px; border-radius: 50%;
+    .hero-btns {
+      display: flex; gap: 1rem; flex-wrap: wrap; justify-content: center;
+      opacity: 0; animation: fadeUp 0.6s 0.55s forwards;
+    }
+    .btn {
+      padding: 0.7rem 1.6rem; border-radius: 10px;
+      font-size: 0.875rem; font-weight: 500;
+      cursor: pointer; transition: all 0.2s;
+      display: inline-flex; align-items: center; gap: 6px;
+    }
+    .btn-primary { color: #fff; }
+    .btn-primary:hover { opacity: 0.85; transform: translateY(-1px); }
+    .btn-ghost {
+      border: 1px solid rgba(255,255,255,0.1);
+      color: rgba(255,255,255,0.6);
+      background: transparent;
+    }
+    .btn-ghost:hover { background: rgba(255,255,255,0.05); border-color: rgba(255,255,255,0.2); color: #fff; }
+
+    /* images strip */
+    .images-strip {
+      opacity: 0; animation: fadeUp 0.6s 0.7s forwards;
+      margin-top: 4rem;
+      display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;
+    }
+    .strip-img {
+      width: 280px; height: 180px;
       object-fit: cover;
-      border: 2.5px solid rgba(255,255,255,0.25);
+      border-radius: 12px;
+      border: 1px solid rgba(255,255,255,0.07);
     }
-    .initials {
-      width: 62px; height: 62px; border-radius: 50%;
+    .strip-img-placeholder {
+      width: 280px; height: 180px;
+      border-radius: 12px;
+      border: 1px solid rgba(255,255,255,0.07);
+      background: rgba(255,255,255,0.03);
       display: flex; align-items: center; justify-content: center;
-      font-family: 'Syne', sans-serif;
-      font-size: 20px; font-weight: 700;
-      border: 2.5px solid rgba(255,255,255,0.2);
+      font-size: 0.75rem; color: rgba(255,255,255,0.2);
     }
-    .card-name {
-      font-family: 'Syne', sans-serif;
-      font-size: 22px; font-weight: 800;
-      letter-spacing: -0.5px;
+
+    /* divider */
+    .divider {
+      width: 100%; height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.08), transparent);
+      position: relative; z-index: 1;
     }
-    .card-role {
-      font-size: 11px;
-      text-transform: uppercase;
-      letter-spacing: 2px;
-      opacity: 0.55;
+
+    /* about section */
+    .about {
+      max-width: 900px; margin: 0 auto;
+      padding: 7rem 2rem;
     }
-    .card-bio {
-      font-size: 13.5px;
-      line-height: 1.65;
-      opacity: 0.8;
+    .section-label {
+      font-size: 0.7rem; letter-spacing: 3px;
+      text-transform: uppercase; font-weight: 500;
+      margin-bottom: 1rem;
     }
-    .card-status {
-      display: flex; align-items: center; gap: 7px;
-      font-size: 12.5px; opacity: 0.85;
+    .about h2 {
+      font-size: clamp(1.8rem, 4vw, 3rem);
+      font-weight: 700; letter-spacing: -1.5px;
+      line-height: 1.15; margin-bottom: 1.5rem; color: #fff;
     }
-    .status-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
-    .card-links { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 2px; }
-    .card-link {
-      padding: 5px 13px;
+    .about-body {
+      font-size: 1.05rem; color: rgba(255,255,255,0.45);
+      max-width: 600px; line-height: 1.8;
+    }
+    .about-body strong { color: rgba(255,255,255,0.8); font-weight: 500; }
+
+    /* feature cards */
+    .features {
+      max-width: 900px; margin: 0 auto;
+      padding: 2rem 2rem 7rem;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 1px;
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 16px;
+      overflow: hidden;
+      background: rgba(255,255,255,0.06);
+    }
+    .feat-card {
+      background: #04040a;
+      padding: 1.75rem;
+      transition: background 0.2s;
+    }
+    .feat-card:hover { background: rgba(255,255,255,0.02); }
+    .feat-icon {
+      width: 36px; height: 36px; border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1rem; margin-bottom: 1rem;
+      border: 1px solid rgba(255,255,255,0.08);
+      background: rgba(255,255,255,0.04);
+    }
+    .feat-card h3 { font-size: 0.95rem; font-weight: 600; margin-bottom: 0.4rem; color: #fff; }
+    .feat-card p { font-size: 0.85rem; color: rgba(255,255,255,0.38); line-height: 1.6; }
+
+    /* links section */
+    .links-section {
+      max-width: 900px; margin: 0 auto;
+      padding: 2rem 2rem 7rem;
+    }
+    .links-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 0.75rem; margin-top: 2rem;
+    }
+    .link-card {
+      padding: 1.1rem 1.3rem;
+      border: 1px solid rgba(255,255,255,0.07);
+      border-radius: 12px;
+      background: rgba(255,255,255,0.02);
+      display: flex; align-items: center; gap: 10px;
+      font-size: 0.9rem; font-weight: 500;
+      transition: border-color 0.2s, background 0.2s, transform 0.2s;
+      color: rgba(255,255,255,0.7);
+    }
+    .link-card:hover { border-color: rgba(255,255,255,0.15); background: rgba(255,255,255,0.05); transform: translateY(-2px); color: #fff; }
+    .link-icon { font-size: 1.1rem; }
+
+    /* CTA footer */
+    .cta-section {
+      max-width: 900px; margin: 0 auto;
+      padding: 2rem 2rem 8rem;
+      text-align: center;
+    }
+    .cta-box {
+      border: 1px solid rgba(255,255,255,0.08);
       border-radius: 20px;
-      font-size: 11.5px; font-weight: 500;
-      border: 1.5px solid rgba(255,255,255,0.35);
-      color: #fff; text-decoration: none;
-      opacity: 0.85;
-      transition: opacity 0.15s, background 0.15s;
+      padding: 4rem 2rem;
+      background: rgba(255,255,255,0.02);
+      position: relative; overflow: hidden;
     }
-    .card-link:hover { opacity: 1; background: rgba(255,255,255,0.12); }
-
-    .sound-btn {
-      position: absolute; top: 14px; right: 14px;
-      background: rgba(255,255,255,0.15);
-      border: none; border-radius: 50%;
-      width: 32px; height: 32px;
-      cursor: pointer; font-size: 14px; color: #fff;
-      display: flex; align-items: center; justify-content: center;
-      transition: background 0.15s;
+    .cta-box h2 {
+      font-size: clamp(1.5rem, 4vw, 2.5rem);
+      font-weight: 700; letter-spacing: -1px;
+      margin-bottom: 1rem; color: #fff;
     }
-    .sound-btn:hover { background: rgba(255,255,255,0.28); }
+    .cta-box p { color: rgba(255,255,255,0.4); margin-bottom: 2rem; }
 
-    @media (max-width: 400px) { .card { width: 300px; } }
+    /* footer */
+    footer {
+      text-align: center; padding: 2rem;
+      font-size: 0.8rem; color: rgba(255,255,255,0.2);
+      border-top: 1px solid rgba(255,255,255,0.05);
+      position: relative; z-index: 1;
+    }
+
+    /* scroll reveal */
+    .reveal {
+      opacity: 0; transform: translateY(28px);
+      transition: opacity 0.65s ease, transform 0.65s ease;
+    }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (max-width: 640px) {
+      nav { padding: 1rem 1.25rem; }
+      .nav-links { display: none; }
+    }
   </style>
 </head>
 <body>
 
 <script>
 /* ================================================================
-   CONFIG — edit everything here, touch nothing else
+   CONFIG — edit everything here
    ================================================================ */
 const CONFIG = {
 
-  /* SPLASH SCREEN */
-  splashText:     "click me.",
-  splashSize:     "clamp(2.5rem, 10vw, 5rem)",   // font size
+  /* NAV */
+  navName:      "jarrah",          /* logo text */
+  navLinks: [                      /* remove any you don't want */
+    { label: "About",   href: "#about" },
+    { label: "Links",   href: "#links" },
+    { label: "Contact", href: "#contact" },
+  ],
+  navCTA:       { label: "Say hi", href: "#contact" },
 
-  /* BACKGROUND
-     - Leave videoUrl as "" for plain black
-     - Paste a direct .mp4 link to use a video background           */
-  videoUrl:       "",
-  videoOpacity:   0.45,                           // 0–1
-  overlayColor:   "rgba(0,0,0,0.4)",              // darkens the video
+  /* HERO */
+  heroBadge:    "welcome",         /* small pill text above title, or "" to hide */
+  heroStatic:   "Built for",       /* the non-cycling part of the big title */
+  heroCycleWords: [                /* words that cycle through */
+    "Everyone",
+    "Jarrah",
+    "You",
+    "Today",
+  ],
+  heroSub:      "This is my little corner of the internet. Still figuring it out.",
+  heroBtnPrimary:   { label: "About me", href: "#about" },
+  heroBtnSecondary: { label: "Links", href: "#links" },
 
-  /* CARD STYLE */
-  cardBg:         "linear-gradient(135deg, #0f0c29, #302b63)",
-  cardColor:      "#ffffff",
-  accentColor:    "#e94560",                      // initials circle colour
-
-  /* CARD CONTENT */
-  name:           "Jarrah",
-  role:           "Designer & Developer",
-  bio:            "Building things on the internet. Into design, music, and late night commits.",
-  avatarUrl:      "",                             // direct image URL, or "" for initials
-  initials:       "JR",
-
-  /* STATUS */
-  statusText:     "Open to work",
-  statusColor:    "#4ade80",
-
-  /* LINKS (add/remove objects as needed) */
-  links: [
-    { label: "GitHub",  url: "https://github.com" },
-    { label: "Twitter", url: "https://twitter.com" },
-    { label: "Email",   url: "mailto:hello@jarrah.lol" },
+  /* HERO IMAGES (paste direct image URLs, or leave array empty to hide) */
+  heroImages: [
+    /* { url: "https://your-image-url.com/photo.jpg" }, */
   ],
 
-  /* SOUND
-     Paste a direct .mp3 URL to show the sound button,
-     or leave as "" to hide it                                       */
-  soundUrl:       "",
+  /* ACCENT / GLOW COLOURS */
+  accentColor:  "#7c5cfc",         /* main accent (buttons, glow, etc) */
+  accent2Color: "#06b6d4",         /* second orb colour */
 
+  /* ABOUT */
+  aboutLabel:   "About",
+  aboutTitle:   "Hey, I'm Jarrah.",
+  aboutText:    `I'm a <strong>designer and developer</strong> based in Australia.
+                 I like building things for the web, listening to music, and staying up too late.`,
+
+  /* FEATURE CARDS (small cards below about — describe yourself, your skills, whatever) */
+  features: [
+    { icon: "✦", title: "Design",    desc: "I care about how things look and feel." },
+    { icon: "⌨", title: "Code",      desc: "I build stuff for the web." },
+    { icon: "♪", title: "Music",     desc: "Always listening to something." },
+  ],
+
+  /* LINKS */
+  linksLabel: "Find me",
+  linksTitle: "Links & socials",
+  links: [
+    { icon: "🐙", label: "GitHub",    url: "https://github.com" },
+    { icon: "🐦", label: "Twitter",   url: "https://twitter.com" },
+    { icon: "📸", label: "Instagram", url: "https://instagram.com" },
+    { icon: "💬", label: "Discord",   url: "https://discord.com" },
+  ],
+
+  /* CONTACT / CTA */
+  ctaTitle:   "Want to reach out?",
+  ctaSub:     "My inbox is open.",
+  ctaEmail:   "hello@jarrah.lol",
+
+  /* FOOTER */
+  footerText: "jarrah.lol",
 };
 /* ================================================================
-   END OF CONFIG
+   END CONFIG
    ================================================================ */
 </script>
 
-<video id="bg-video" autoplay muted loop playsinline></video>
-<div id="bg-overlay"></div>
+<!-- bg -->
+<div class="grid-bg"></div>
+<div class="orb orb1" id="orb1"></div>
+<div class="orb orb2" id="orb2"></div>
 
-<div id="splash"><span id="splash-text"></span></div>
+<!-- nav -->
+<nav>
+  <div class="nav-logo" id="nav-logo"></div>
+  <div class="nav-links" id="nav-links"></div>
+  <a class="nav-cta" id="nav-cta" href="#"></a>
+</nav>
 
-<div id="card-wrap">
-  <div class="scene">
-    <div class="card" id="card">
-      <div class="shine" id="shine"></div>
-      <button class="sound-btn" id="sound-btn" style="display:none">♪</button>
-      <div class="card-body">
-        <div id="avatar-wrap"></div>
-        <p class="card-name" id="c-name"></p>
-        <p class="card-role" id="c-role"></p>
-        <p class="card-bio"  id="c-bio"></p>
-        <div class="card-status">
-          <div class="status-dot" id="c-dot"></div>
-          <span id="c-status"></span>
-        </div>
-        <div class="card-links" id="c-links"></div>
-      </div>
-    </div>
+<!-- hero -->
+<div class="hero">
+  <div class="hero-badge" id="hero-badge" style="display:none">
+    <div class="badge-dot" id="badge-dot"></div>
+    <span id="badge-text"></span>
   </div>
+  <h1>
+    <span class="static" id="hero-static"></span><br>
+    <span class="cycle-wrap" id="cycle-wrap"></span>
+  </h1>
+  <p class="hero-sub" id="hero-sub"></p>
+  <div class="hero-btns">
+    <a class="btn btn-primary" id="btn-primary" href="#"></a>
+    <a class="btn btn-ghost"   id="btn-secondary" href="#"></a>
+  </div>
+  <div class="images-strip" id="images-strip"></div>
 </div>
 
+<div class="divider"></div>
+
+<!-- about -->
+<section class="about reveal" id="about">
+  <p class="section-label" id="about-label"></p>
+  <h2 id="about-title"></h2>
+  <p class="about-body" id="about-body"></p>
+</section>
+
+<div class="features reveal" id="features"></div>
+
+<div class="divider" style="max-width:900px;margin:0 auto"></div>
+
+<!-- links -->
+<section class="links-section reveal" id="links">
+  <p class="section-label" id="links-label"></p>
+  <h2 style="font-size:clamp(1.8rem,4vw,3rem);font-weight:700;letter-spacing:-1.5px;color:#fff" id="links-title"></h2>
+  <div class="links-grid" id="links-grid"></div>
+</section>
+
+<div class="divider" style="max-width:900px;margin:0 auto"></div>
+
+<!-- cta -->
+<section class="cta-section reveal" id="contact">
+  <div class="cta-box">
+    <div class="cta-glow" id="cta-glow" style="position:absolute;inset:0;pointer-events:none;border-radius:20px;opacity:0.12;filter:blur(60px);"></div>
+    <h2 id="cta-title"></h2>
+    <p id="cta-sub"></p>
+    <a class="btn btn-primary" id="cta-btn" href="#"></a>
+  </div>
+</section>
+
+<footer id="footer"></footer>
+
 <script>
-  document.title = CONFIG.name;
+  /* apply accent colours */
+  document.getElementById('orb1').style.background = CONFIG.accentColor;
+  document.getElementById('orb2').style.background = CONFIG.accent2Color;
+  document.getElementById('cta-glow').style.background = CONFIG.accentColor;
+  document.documentElement.style.setProperty('--accent', CONFIG.accentColor);
+  document.documentElement.style.setProperty('--accent2', CONFIG.accent2Color);
 
-  /* splash */
-  const splashText = document.getElementById('splash-text');
-  splashText.textContent = CONFIG.splashText;
-  splashText.style.fontSize = CONFIG.splashSize;
+  /* nav */
+  const navLogo = document.getElementById('nav-logo');
+  navLogo.innerHTML = CONFIG.navName + '<span>.</span>';
+  const navLinksEl = document.getElementById('nav-links');
+  CONFIG.navLinks.forEach(l => {
+    navLinksEl.innerHTML += `<a href="${l.href}">${l.label}</a>`;
+  });
+  const navCTA = document.getElementById('nav-cta');
+  navCTA.textContent = CONFIG.navCTA.label;
+  navCTA.href = CONFIG.navCTA.href;
 
-  /* video bg */
-  const vid = document.getElementById('bg-video');
-  document.getElementById('bg-overlay').style.background = CONFIG.overlayColor;
-  if (CONFIG.videoUrl) {
-    vid.src = CONFIG.videoUrl;
-    vid.style.opacity = CONFIG.videoOpacity;
-  } else {
-    vid.style.display = 'none';
+  /* badge */
+  if (CONFIG.heroBadge) {
+    const badge = document.getElementById('hero-badge');
+    badge.style.display = 'inline-flex';
+    document.getElementById('badge-dot').style.background = CONFIG.accentColor;
+    document.getElementById('badge-text').textContent = CONFIG.heroBadge;
   }
 
-  /* card */
-  const card = document.getElementById('card');
-  card.style.background = CONFIG.cardBg;
-  card.style.color = CONFIG.cardColor;
+  /* hero static text */
+  document.getElementById('hero-static').textContent = CONFIG.heroStatic;
+  document.getElementById('hero-sub').textContent = CONFIG.heroSub;
 
-  /* avatar */
-  const avatarWrap = document.getElementById('avatar-wrap');
-  if (CONFIG.avatarUrl) {
-    avatarWrap.innerHTML = `<img class="avatar" src="${CONFIG.avatarUrl}" alt="${CONFIG.name}" />`;
+  /* cycle words */
+  const cycleWrap = document.getElementById('cycle-wrap');
+  cycleWrap.style.color = CONFIG.accentColor;
+  CONFIG.heroCycleWords.forEach((w, i) => {
+    const span = document.createElement('span');
+    span.className = 'cycle-word' + (i === 0 ? ' active' : '');
+    span.textContent = w;
+    cycleWrap.appendChild(span);
+  });
+  /* set width to widest word */
+  const widths = CONFIG.heroCycleWords.map(w => w.length);
+  cycleWrap.style.minWidth = Math.max(...widths) + 'ch';
+
+  let current = 0;
+  setInterval(() => {
+    const words = cycleWrap.querySelectorAll('.cycle-word');
+    words[current].classList.remove('active');
+    words[current].classList.add('exit');
+    setTimeout(() => words[current].classList.remove('exit'), 450);
+    current = (current + 1) % words.length;
+    words[current].classList.add('active');
+  }, 2200);
+
+  /* hero buttons */
+  const btnP = document.getElementById('btn-primary');
+  btnP.textContent = CONFIG.heroBtnPrimary.label;
+  btnP.href = CONFIG.heroBtnPrimary.href;
+  btnP.style.background = CONFIG.accentColor;
+
+  const btnS = document.getElementById('btn-secondary');
+  btnS.textContent = CONFIG.heroBtnSecondary.label;
+  btnS.href = CONFIG.heroBtnSecondary.href;
+
+  /* hero images */
+  const strip = document.getElementById('images-strip');
+  if (CONFIG.heroImages && CONFIG.heroImages.length > 0) {
+    CONFIG.heroImages.forEach(img => {
+      strip.innerHTML += `<img class="strip-img" src="${img.url}" alt="" />`;
+    });
   } else {
-    avatarWrap.innerHTML = `<div class="initials" style="background:${CONFIG.accentColor}22;color:${CONFIG.accentColor}">${CONFIG.initials}</div>`;
+    strip.style.display = 'none';
   }
 
-  document.getElementById('c-name').textContent   = CONFIG.name;
-  document.getElementById('c-role').textContent   = CONFIG.role;
-  document.getElementById('c-bio').textContent    = CONFIG.bio;
-  document.getElementById('c-status').textContent = CONFIG.statusText;
-  document.getElementById('c-dot').style.background = CONFIG.statusColor;
+  /* about */
+  document.getElementById('about-label').textContent = CONFIG.aboutLabel;
+  document.getElementById('about-label').style.color = CONFIG.accentColor;
+  document.getElementById('about-title').textContent = CONFIG.aboutTitle;
+  document.getElementById('about-body').innerHTML = CONFIG.aboutText;
+
+  /* features */
+  const featGrid = document.getElementById('features');
+  CONFIG.features.forEach(f => {
+    featGrid.innerHTML += `
+      <div class="feat-card">
+        <div class="feat-icon">${f.icon}</div>
+        <h3>${f.title}</h3>
+        <p>${f.desc}</p>
+      </div>`;
+  });
 
   /* links */
+  document.getElementById('links-label').textContent = CONFIG.linksLabel;
+  document.getElementById('links-label').style.color = CONFIG.accentColor;
+  document.getElementById('links-title').textContent = CONFIG.linksTitle;
+  const linksGrid = document.getElementById('links-grid');
   CONFIG.links.forEach(l => {
-    const a = document.createElement('a');
-    a.href = l.url; a.className = 'card-link';
-    a.textContent = l.label; a.target = '_blank'; a.rel = 'noopener';
-    document.getElementById('c-links').appendChild(a);
+    linksGrid.innerHTML += `
+      <a class="link-card" href="${l.url}" target="_blank" rel="noopener">
+        <span class="link-icon">${l.icon}</span>${l.label}
+      </a>`;
   });
 
-  /* sound */
-  const soundBtn = document.getElementById('sound-btn');
-  if (CONFIG.soundUrl) {
-    soundBtn.style.display = 'flex';
-    let audio = null;
-    soundBtn.addEventListener('click', e => {
-      e.stopPropagation();
-      if (!audio) audio = new Audio(CONFIG.soundUrl);
-      audio.currentTime = 0; audio.play();
-    });
-  }
+  /* cta */
+  document.getElementById('cta-title').textContent = CONFIG.ctaTitle;
+  document.getElementById('cta-sub').textContent = CONFIG.ctaSub;
+  const ctaBtn = document.getElementById('cta-btn');
+  ctaBtn.textContent = CONFIG.ctaEmail;
+  ctaBtn.href = 'mailto:' + CONFIG.ctaEmail;
+  ctaBtn.style.background = CONFIG.accentColor;
 
-  /* splash → card */
-  document.getElementById('splash').addEventListener('click', () => {
-    document.getElementById('splash').classList.add('hidden');
-    document.getElementById('card-wrap').classList.add('visible');
-  });
+  /* footer */
+  document.getElementById('footer').textContent = '© ' + new Date().getFullYear() + ' ' + CONFIG.footerText;
+  document.title = CONFIG.navName;
 
-  /* 3d tilt */
-  const shine = document.getElementById('shine');
-  card.addEventListener('mousemove', e => {
-    const r  = card.getBoundingClientRect();
-    const dx = (e.clientX - r.left - r.width  / 2) / (r.width  / 2);
-    const dy = (e.clientY - r.top  - r.height / 2) / (r.height / 2);
-    card.style.transform   = `rotateY(${dx*16}deg) rotateX(${-dy*16}deg) scale(1.04)`;
-    card.style.boxShadow   = `${-dx*22}px ${dy*22}px 50px rgba(0,0,0,0.55)`;
-    shine.style.opacity    = '1';
-    shine.style.background = `radial-gradient(circle at ${(dx+1)/2*100}% ${(dy+1)/2*100}%, rgba(255,255,255,0.18) 0%, transparent 55%)`;
-  });
-  card.addEventListener('mouseleave', () => {
-    card.style.transform = 'rotateY(0) rotateX(0) scale(1)';
-    card.style.boxShadow = 'none';
-    shine.style.opacity  = '0';
-  });
-  card.addEventListener('touchmove', e => {
-    const t  = e.touches[0];
-    const r  = card.getBoundingClientRect();
-    const dx = (t.clientX - r.left - r.width  / 2) / (r.width  / 2);
-    const dy = (t.clientY - r.top  - r.height / 2) / (r.height / 2);
-    card.style.transform = `rotateY(${dx*16}deg) rotateX(${-dy*16}deg) scale(1.04)`;
-    shine.style.opacity  = '1';
-  }, { passive: true });
-  card.addEventListener('touchend', () => {
-    card.style.transform = 'rotateY(0) rotateX(0) scale(1)';
-    shine.style.opacity  = '0';
-  });
+  /* scroll reveal */
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); } });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 </script>
 </body>
 </html>
