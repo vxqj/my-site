@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Jarrah</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      min-height: 100vh;
+      background: #000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'DM Sans', sans-serif;
+      overflow: hidden;
+    }
+
+    /* background video */
+    #bg-video {
+      position: fixed; inset: 0;
+      width: 100%; height: 100%;
+      object-fit: cover;
+      z-index: 0;
+      pointer-events: none;
+    }
+    #bg-overlay {
+      position: fixed; inset: 0;
+      z-index: 1;
+      pointer-events: none;
+    }
+
+    /* splash */
+    #splash {
+      position: fixed; inset: 0;
+      z-index: 10;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: opacity 0.6s ease, visibility 0.6s ease;
+    }
+    #splash.hidden {
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+    }
+    #splash-text {
+      font-family: 'Syne', sans-serif;
+      font-weight: 800;
+      letter-spacing: -1px;
+      color: #fff;
+      animation: pulse 2s ease-in-out infinite;
+      user-select: none;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1;   transform: scale(1);    }
+      50%       { opacity: 0.4; transform: scale(0.96); }
+    }
+
+    /* card wrapper */
+    #card-wrap {
+      position: relative;
+      z-index: 2;
+      opacity: 0;
+      transform: translateY(28px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+      pointer-events: none;
+    }
+    #card-wrap.visible {
+      opacity: 1;
+      transform: translateY(0);
+      pointer-events: auto;
+    }
+
+    /* 3d card */
+    .scene { perspective: 900px; }
+    .card {
+      width: 340px;
+      border-radius: 22px;
+      padding: 2rem;
+      position: relative;
+      transform-style: preserve-3d;
+      transition: transform 0.08s ease, box-shadow 0.08s ease;
+      cursor: default;
+      overflow: hidden;
+    }
+    .shine {
+      position: absolute; inset: 0;
+      border-radius: 22px;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.1s;
+    }
+    .card-body {
+      transform: translateZ(28px);
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      position: relative;
+    }
+    .avatar {
+      width: 62px; height: 62px; border-radius: 50%;
+      object-fit: cover;
+      border: 2.5px solid rgba(255,255,255,0.25);
+    }
+    .initials {
+      width: 62px; height: 62px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'Syne', sans-serif;
+      font-size: 20px; font-weight: 700;
+      border: 2.5px solid rgba(255,255,255,0.2);
+    }
+    .card-name {
+      font-family: 'Syne', sans-serif;
+      font-size: 22px; font-weight: 800;
+      letter-spacing: -0.5px;
+    }
+    .card-role {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      opacity: 0.55;
+    }
+    .card-bio {
+      font-size: 13.5px;
+      line-height: 1.65;
+      opacity: 0.8;
+    }
+    .card-status {
+      display: flex; align-items: center; gap: 7px;
+      font-size: 12.5px; opacity: 0.85;
+    }
+    .status-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+    .card-links { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 2px; }
+    .card-link {
+      padding: 5px 13px;
+      border-radius: 20px;
+      font-size: 11.5px; font-weight: 500;
+      border: 1.5px solid rgba(255,255,255,0.35);
+      color: #fff; text-decoration: none;
+      opacity: 0.85;
+      transition: opacity 0.15s, background 0.15s;
+    }
+    .card-link:hover { opacity: 1; background: rgba(255,255,255,0.12); }
+
+    .sound-btn {
+      position: absolute; top: 14px; right: 14px;
+      background: rgba(255,255,255,0.15);
+      border: none; border-radius: 50%;
+      width: 32px; height: 32px;
+      cursor: pointer; font-size: 14px; color: #fff;
+      display: flex; align-items: center; justify-content: center;
+      transition: background 0.15s;
+    }
+    .sound-btn:hover { background: rgba(255,255,255,0.28); }
+
+    @media (max-width: 400px) { .card { width: 300px; } }
+  </style>
+</head>
+<body>
+
+<script>
+/* ================================================================
+   CONFIG — edit everything here, touch nothing else
+   ================================================================ */
+const CONFIG = {
+
+  /* SPLASH SCREEN */
+  splashText:     "click me.",
+  splashSize:     "clamp(2.5rem, 10vw, 5rem)",   // font size
+
+  /* BACKGROUND
+     - Leave videoUrl as "" for plain black
+     - Paste a direct .mp4 link to use a video background           */
+  videoUrl:       "",
+  videoOpacity:   0.45,                           // 0–1
+  overlayColor:   "rgba(0,0,0,0.4)",              // darkens the video
+
+  /* CARD STYLE */
+  cardBg:         "linear-gradient(135deg, #0f0c29, #302b63)",
+  cardColor:      "#ffffff",
+  accentColor:    "#e94560",                      // initials circle colour
+
+  /* CARD CONTENT */
+  name:           "Jarrah",
+  role:           "Designer & Developer",
+  bio:            "Building things on the internet. Into design, music, and late night commits.",
+  avatarUrl:      "",                             // direct image URL, or "" for initials
+  initials:       "JR",
+
+  /* STATUS */
+  statusText:     "Open to work",
+  statusColor:    "#4ade80",
+
+  /* LINKS (add/remove objects as needed) */
+  links: [
+    { label: "GitHub",  url: "https://github.com" },
+    { label: "Twitter", url: "https://twitter.com" },
+    { label: "Email",   url: "mailto:hello@jarrah.lol" },
+  ],
+
+  /* SOUND
+     Paste a direct .mp3 URL to show the sound button,
+     or leave as "" to hide it                                       */
+  soundUrl:       "",
+
+};
+/* ================================================================
+   END OF CONFIG
+   ================================================================ */
+</script>
+
+<video id="bg-video" autoplay muted loop playsinline></video>
+<div id="bg-overlay"></div>
+
+<div id="splash"><span id="splash-text"></span></div>
+
+<div id="card-wrap">
+  <div class="scene">
+    <div class="card" id="card">
+      <div class="shine" id="shine"></div>
+      <button class="sound-btn" id="sound-btn" style="display:none">♪</button>
+      <div class="card-body">
+        <div id="avatar-wrap"></div>
+        <p class="card-name" id="c-name"></p>
+        <p class="card-role" id="c-role"></p>
+        <p class="card-bio"  id="c-bio"></p>
+        <div class="card-status">
+          <div class="status-dot" id="c-dot"></div>
+          <span id="c-status"></span>
+        </div>
+        <div class="card-links" id="c-links"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  document.title = CONFIG.name;
+
+  /* splash */
+  const splashText = document.getElementById('splash-text');
+  splashText.textContent = CONFIG.splashText;
+  splashText.style.fontSize = CONFIG.splashSize;
+
+  /* video bg */
+  const vid = document.getElementById('bg-video');
+  document.getElementById('bg-overlay').style.background = CONFIG.overlayColor;
+  if (CONFIG.videoUrl) {
+    vid.src = CONFIG.videoUrl;
+    vid.style.opacity = CONFIG.videoOpacity;
+  } else {
+    vid.style.display = 'none';
+  }
+
+  /* card */
+  const card = document.getElementById('card');
+  card.style.background = CONFIG.cardBg;
+  card.style.color = CONFIG.cardColor;
+
+  /* avatar */
+  const avatarWrap = document.getElementById('avatar-wrap');
+  if (CONFIG.avatarUrl) {
+    avatarWrap.innerHTML = `<img class="avatar" src="${CONFIG.avatarUrl}" alt="${CONFIG.name}" />`;
+  } else {
+    avatarWrap.innerHTML = `<div class="initials" style="background:${CONFIG.accentColor}22;color:${CONFIG.accentColor}">${CONFIG.initials}</div>`;
+  }
+
+  document.getElementById('c-name').textContent   = CONFIG.name;
+  document.getElementById('c-role').textContent   = CONFIG.role;
+  document.getElementById('c-bio').textContent    = CONFIG.bio;
+  document.getElementById('c-status').textContent = CONFIG.statusText;
+  document.getElementById('c-dot').style.background = CONFIG.statusColor;
+
+  /* links */
+  CONFIG.links.forEach(l => {
+    const a = document.createElement('a');
+    a.href = l.url; a.className = 'card-link';
+    a.textContent = l.label; a.target = '_blank'; a.rel = 'noopener';
+    document.getElementById('c-links').appendChild(a);
+  });
+
+  /* sound */
+  const soundBtn = document.getElementById('sound-btn');
+  if (CONFIG.soundUrl) {
+    soundBtn.style.display = 'flex';
+    let audio = null;
+    soundBtn.addEventListener('click', e => {
+      e.stopPropagation();
+      if (!audio) audio = new Audio(CONFIG.soundUrl);
+      audio.currentTime = 0; audio.play();
+    });
+  }
+
+  /* splash → card */
+  document.getElementById('splash').addEventListener('click', () => {
+    document.getElementById('splash').classList.add('hidden');
+    document.getElementById('card-wrap').classList.add('visible');
+  });
+
+  /* 3d tilt */
+  const shine = document.getElementById('shine');
+  card.addEventListener('mousemove', e => {
+    const r  = card.getBoundingClientRect();
+    const dx = (e.clientX - r.left - r.width  / 2) / (r.width  / 2);
+    const dy = (e.clientY - r.top  - r.height / 2) / (r.height / 2);
+    card.style.transform   = `rotateY(${dx*16}deg) rotateX(${-dy*16}deg) scale(1.04)`;
+    card.style.boxShadow   = `${-dx*22}px ${dy*22}px 50px rgba(0,0,0,0.55)`;
+    shine.style.opacity    = '1';
+    shine.style.background = `radial-gradient(circle at ${(dx+1)/2*100}% ${(dy+1)/2*100}%, rgba(255,255,255,0.18) 0%, transparent 55%)`;
+  });
+  card.addEventListener('mouseleave', () => {
+    card.style.transform = 'rotateY(0) rotateX(0) scale(1)';
+    card.style.boxShadow = 'none';
+    shine.style.opacity  = '0';
+  });
+  card.addEventListener('touchmove', e => {
+    const t  = e.touches[0];
+    const r  = card.getBoundingClientRect();
+    const dx = (t.clientX - r.left - r.width  / 2) / (r.width  / 2);
+    const dy = (t.clientY - r.top  - r.height / 2) / (r.height / 2);
+    card.style.transform = `rotateY(${dx*16}deg) rotateX(${-dy*16}deg) scale(1.04)`;
+    shine.style.opacity  = '1';
+  }, { passive: true });
+  card.addEventListener('touchend', () => {
+    card.style.transform = 'rotateY(0) rotateX(0) scale(1)';
+    shine.style.opacity  = '0';
+  });
+</script>
+</body>
+</html>
