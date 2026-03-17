@@ -9,19 +9,15 @@
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     html { scroll-behavior: smooth; }
-
     body {
-      background: #04040a;
-      color: #e2e2ea;
+      background: #04040a; color: #e2e2ea;
       font-family: 'Inter', sans-serif;
       -webkit-font-smoothing: antialiased;
       overflow-x: hidden;
     }
-
     a { color: inherit; text-decoration: none; }
     img { max-width: 100%; display: block; border-radius: 12px; }
 
-    /* grid bg */
     .grid-bg {
       position: fixed; inset: 0; z-index: 0; pointer-events: none;
       background-image:
@@ -29,23 +25,15 @@
         linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
       background-size: 64px 64px;
     }
-
-    /* glow orbs */
-    .orb {
-      position: fixed; border-radius: 50%;
-      pointer-events: none; z-index: 0;
-      filter: blur(80px); opacity: 0.35;
-    }
+    .orb { position: fixed; border-radius: 50%; pointer-events: none; z-index: 0; filter: blur(80px); opacity: 0.35; }
     .orb1 { width: 500px; height: 500px; top: -100px; left: -100px; }
     .orb2 { width: 400px; height: 400px; bottom: -80px; right: -80px; }
 
-    /* nav */
     nav {
       position: fixed; top: 0; left: 0; right: 0; z-index: 100;
       display: flex; align-items: center; justify-content: space-between;
       padding: 1.1rem 3rem;
-      background: rgba(4,4,10,0.75);
-      backdrop-filter: blur(16px);
+      background: rgba(4,4,10,0.75); backdrop-filter: blur(16px);
       border-bottom: 1px solid rgba(255,255,255,0.06);
     }
     .nav-logo { font-size: 1rem; font-weight: 600; letter-spacing: -0.3px; }
@@ -61,16 +49,12 @@
     }
     .nav-cta:hover { background: rgba(255,255,255,0.06); border-color: rgba(255,255,255,0.2); }
 
-    /* sections */
     section, .hero { position: relative; z-index: 1; }
 
-    /* hero */
     .hero {
-      min-height: 100vh;
-      display: flex; flex-direction: column;
+      min-height: 100vh; display: flex; flex-direction: column;
       align-items: center; justify-content: center;
-      text-align: center;
-      padding: 8rem 2rem 4rem;
+      text-align: center; padding: 8rem 2rem 4rem;
     }
     .hero-badge {
       display: inline-flex; align-items: center; gap: 6px;
@@ -78,51 +62,30 @@
       font-size: 0.75rem; font-weight: 500;
       border: 1px solid rgba(255,255,255,0.1);
       background: rgba(255,255,255,0.04);
-      color: rgba(255,255,255,0.55);
-      margin-bottom: 2rem;
+      color: rgba(255,255,255,0.55); margin-bottom: 2rem;
       opacity: 0; animation: fadeUp 0.6s 0.1s forwards;
     }
     .badge-dot { width: 6px; height: 6px; border-radius: 50%; }
     .hero h1 {
-      font-size: clamp(2.8rem, 8vw, 6.5rem);
-      font-weight: 700;
-      letter-spacing: -3px;
-      line-height: 1.05;
-      margin-bottom: 1.5rem;
+      font-size: clamp(2.8rem, 8vw, 6.5rem); font-weight: 700;
+      letter-spacing: -3px; line-height: 1.05; margin-bottom: 1.5rem;
       opacity: 0; animation: fadeUp 0.6s 0.25s forwards;
     }
     .hero h1 .static { color: #fff; }
     .hero h1 .cycle-wrap {
-      display: inline-block;
-      position: relative;
-      height: 1.1em;
-      overflow: hidden;
-      vertical-align: bottom;
-      min-width: 2ch;
+      display: inline-block; position: relative;
+      height: 1.1em; overflow: hidden; vertical-align: bottom; min-width: 2ch;
     }
     .cycle-word {
-      display: block;
-      position: absolute;
-      left: 0; right: 0;
-      opacity: 0;
-      transform: translateY(40px);
-      transition: opacity 0.45s ease, transform 0.45s ease;
-      text-align: center;
+      display: block; position: absolute; left: 0; right: 0;
+      opacity: 0; transform: translateY(40px);
+      transition: opacity 0.45s ease, transform 0.45s ease; text-align: center;
     }
-    .cycle-word.active {
-      opacity: 1;
-      transform: translateY(0);
-    }
-    .cycle-word.exit {
-      opacity: 0;
-      transform: translateY(-40px);
-    }
+    .cycle-word.active { opacity: 1; transform: translateY(0); }
+    .cycle-word.exit { opacity: 0; transform: translateY(-40px); }
     .hero-sub {
-      font-size: clamp(0.95rem, 2vw, 1.1rem);
-      color: rgba(255,255,255,0.4);
-      max-width: 520px;
-      line-height: 1.7;
-      margin-bottom: 2.5rem;
+      font-size: clamp(0.95rem, 2vw, 1.1rem); color: rgba(255,255,255,0.4);
+      max-width: 520px; line-height: 1.7; margin-bottom: 2.5rem;
       opacity: 0; animation: fadeUp 0.6s 0.4s forwards;
     }
     .hero-btns {
@@ -131,159 +94,185 @@
     }
     .btn {
       padding: 0.7rem 1.6rem; border-radius: 10px;
-      font-size: 0.875rem; font-weight: 500;
-      cursor: pointer; transition: all 0.2s;
+      font-size: 0.875rem; font-weight: 500; cursor: pointer; transition: all 0.2s;
       display: inline-flex; align-items: center; gap: 6px;
     }
     .btn-primary { color: #fff; }
     .btn-primary:hover { opacity: 0.85; transform: translateY(-1px); }
     .btn-ghost {
-      border: 1px solid rgba(255,255,255,0.1);
-      color: rgba(255,255,255,0.6);
-      background: transparent;
+      border: 1px solid rgba(255,255,255,0.1); color: rgba(255,255,255,0.6); background: transparent;
     }
     .btn-ghost:hover { background: rgba(255,255,255,0.05); border-color: rgba(255,255,255,0.2); color: #fff; }
 
-    /* images strip */
     .images-strip {
       opacity: 0; animation: fadeUp 0.6s 0.7s forwards;
-      margin-top: 4rem;
-      display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;
+      margin-top: 4rem; display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;
     }
-    .strip-img {
-      width: 280px; height: 180px;
-      object-fit: cover;
-      border-radius: 12px;
-      border: 1px solid rgba(255,255,255,0.07);
-    }
-    .strip-img-placeholder {
-      width: 280px; height: 180px;
-      border-radius: 12px;
-      border: 1px solid rgba(255,255,255,0.07);
-      background: rgba(255,255,255,0.03);
-      display: flex; align-items: center; justify-content: center;
-      font-size: 0.75rem; color: rgba(255,255,255,0.2);
-    }
+    .strip-img { width: 280px; height: 180px; object-fit: cover; border-radius: 12px; border: 1px solid rgba(255,255,255,0.07); }
 
-    /* divider */
     .divider {
       width: 100%; height: 1px;
       background: linear-gradient(90deg, transparent, rgba(255,255,255,0.08), transparent);
       position: relative; z-index: 1;
     }
 
-    /* about section */
-    .about {
-      max-width: 900px; margin: 0 auto;
-      padding: 7rem 2rem;
-    }
-    .section-label {
-      font-size: 0.7rem; letter-spacing: 3px;
-      text-transform: uppercase; font-weight: 500;
-      margin-bottom: 1rem;
-    }
-    .about h2 {
-      font-size: clamp(1.8rem, 4vw, 3rem);
-      font-weight: 700; letter-spacing: -1.5px;
-      line-height: 1.15; margin-bottom: 1.5rem; color: #fff;
-    }
-    .about-body {
-      font-size: 1.05rem; color: rgba(255,255,255,0.45);
-      max-width: 600px; line-height: 1.8;
-    }
+    .about { max-width: 900px; margin: 0 auto; padding: 7rem 2rem; }
+    .section-label { font-size: 0.7rem; letter-spacing: 3px; text-transform: uppercase; font-weight: 500; margin-bottom: 1rem; }
+    .about h2 { font-size: clamp(1.8rem, 4vw, 3rem); font-weight: 700; letter-spacing: -1.5px; line-height: 1.15; margin-bottom: 1.5rem; color: #fff; }
+    .about-body { font-size: 1.05rem; color: rgba(255,255,255,0.45); max-width: 600px; line-height: 1.8; }
     .about-body strong { color: rgba(255,255,255,0.8); font-weight: 500; }
 
-    /* feature cards */
     .features {
-      max-width: 900px; margin: 0 auto;
-      padding: 2rem 2rem 7rem;
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-      gap: 1px;
-      border: 1px solid rgba(255,255,255,0.06);
-      border-radius: 16px;
-      overflow: hidden;
-      background: rgba(255,255,255,0.06);
+      max-width: 900px; margin: 0 auto; padding: 2rem 2rem 7rem;
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 1px; border: 1px solid rgba(255,255,255,0.06); border-radius: 16px;
+      overflow: hidden; background: rgba(255,255,255,0.06);
     }
-    .feat-card {
-      background: #04040a;
-      padding: 1.75rem;
-      transition: background 0.2s;
-    }
+    .feat-card { background: #04040a; padding: 1.75rem; transition: background 0.2s; }
     .feat-card:hover { background: rgba(255,255,255,0.02); }
     .feat-icon {
-      width: 36px; height: 36px; border-radius: 8px;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 1rem; margin-bottom: 1rem;
-      border: 1px solid rgba(255,255,255,0.08);
-      background: rgba(255,255,255,0.04);
+      width: 36px; height: 36px; border-radius: 8px; display: flex; align-items: center;
+      justify-content: center; font-size: 1rem; margin-bottom: 1rem;
+      border: 1px solid rgba(255,255,255,0.08); background: rgba(255,255,255,0.04);
     }
     .feat-card h3 { font-size: 0.95rem; font-weight: 600; margin-bottom: 0.4rem; color: #fff; }
     .feat-card p { font-size: 0.85rem; color: rgba(255,255,255,0.38); line-height: 1.6; }
 
-    /* links section */
-    .links-section {
-      max-width: 900px; margin: 0 auto;
-      padding: 2rem 2rem 7rem;
-    }
-    .links-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-      gap: 0.75rem; margin-top: 2rem;
-    }
+    .links-section { max-width: 900px; margin: 0 auto; padding: 2rem 2rem 7rem; }
+    .links-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 0.75rem; margin-top: 2rem; }
     .link-card {
-      padding: 1.1rem 1.3rem;
-      border: 1px solid rgba(255,255,255,0.07);
-      border-radius: 12px;
-      background: rgba(255,255,255,0.02);
-      display: flex; align-items: center; gap: 10px;
+      padding: 1.1rem 1.3rem; border: 1px solid rgba(255,255,255,0.07); border-radius: 12px;
+      background: rgba(255,255,255,0.02); display: flex; align-items: center; gap: 10px;
       font-size: 0.9rem; font-weight: 500;
-      transition: border-color 0.2s, background 0.2s, transform 0.2s;
-      color: rgba(255,255,255,0.7);
+      transition: border-color 0.2s, background 0.2s, transform 0.2s; color: rgba(255,255,255,0.7);
     }
     .link-card:hover { border-color: rgba(255,255,255,0.15); background: rgba(255,255,255,0.05); transform: translateY(-2px); color: #fff; }
     .link-icon { font-size: 1.1rem; }
 
-    /* CTA footer */
-    .cta-section {
-      max-width: 900px; margin: 0 auto;
-      padding: 2rem 2rem 8rem;
-      text-align: center;
-    }
+    .cta-section { max-width: 900px; margin: 0 auto; padding: 2rem 2rem 8rem; text-align: center; }
     .cta-box {
-      border: 1px solid rgba(255,255,255,0.08);
-      border-radius: 20px;
-      padding: 4rem 2rem;
-      background: rgba(255,255,255,0.02);
+      border: 1px solid rgba(255,255,255,0.08); border-radius: 20px;
+      padding: 4rem 2rem; background: rgba(255,255,255,0.02);
       position: relative; overflow: hidden;
     }
-    .cta-box h2 {
-      font-size: clamp(1.5rem, 4vw, 2.5rem);
-      font-weight: 700; letter-spacing: -1px;
-      margin-bottom: 1rem; color: #fff;
-    }
+    .cta-box h2 { font-size: clamp(1.5rem, 4vw, 2.5rem); font-weight: 700; letter-spacing: -1px; margin-bottom: 1rem; color: #fff; }
     .cta-box p { color: rgba(255,255,255,0.4); margin-bottom: 2rem; }
 
-    /* footer */
+    /* ── MUSIC PLAYER ── */
+    .music-section { max-width: 900px; margin: 0 auto; padding: 0 2rem 5rem; }
+    .music-player {
+      border: 1px solid rgba(255,255,255,0.08); border-radius: 16px;
+      padding: 1.25rem 1.5rem; background: rgba(255,255,255,0.02);
+      display: flex; align-items: center; gap: 1rem;
+      cursor: pointer; transition: background 0.2s, border-color 0.2s;
+      user-select: none;
+    }
+    .music-player:hover { background: rgba(255,255,255,0.04); border-color: rgba(255,255,255,0.14); }
+    .music-art {
+      width: 52px; height: 52px; border-radius: 10px;
+      object-fit: cover; flex-shrink: 0;
+    }
+    .music-art-placeholder {
+      width: 52px; height: 52px; border-radius: 10px; flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.4rem; background: rgba(255,255,255,0.06);
+    }
+    .music-info { flex: 1; min-width: 0; }
+    .music-title { font-size: 0.95rem; font-weight: 600; color: #fff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .music-artist { font-size: 0.8rem; color: rgba(255,255,255,0.4); margin-top: 3px; }
+    .music-progress { margin-top: 8px; height: 3px; border-radius: 99px; background: rgba(255,255,255,0.08); overflow: hidden; }
+    .music-bar { height: 100%; border-radius: 99px; width: 0%; transition: width 0.5s linear; }
+    .music-controls { display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
+    .music-time { font-size: 0.72rem; color: rgba(255,255,255,0.3); }
+    .music-play {
+      width: 38px; height: 38px; border-radius: 50%;
+      background: rgba(255,255,255,0.08); border: none;
+      color: #fff; font-size: 0.9rem; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: background 0.15s;
+    }
+    .music-play:hover { background: rgba(255,255,255,0.16); }
+
+    /* ── COMMENTS ── */
+    .comments-section { max-width: 900px; margin: 0 auto; padding: 0 2rem 8rem; position: relative; z-index: 1; }
+    .comments-header { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem; margin-bottom: 1.5rem; }
+    .comments-title { font-size: 1.3rem; font-weight: 700; color: #fff; letter-spacing: -0.5px; }
+    .comments-count { font-size: 0.8rem; color: rgba(255,255,255,0.35); margin-left: 8px; }
+
+    /* sort tabs */
+    .sort-tabs { display: flex; gap: 0.5rem; }
+    .sort-tab {
+      padding: 0.35rem 0.9rem; border-radius: 99px; font-size: 0.78rem; font-weight: 500;
+      border: 1px solid rgba(255,255,255,0.08); background: transparent;
+      color: rgba(255,255,255,0.4); cursor: pointer; transition: all 0.2s;
+      display: flex; align-items: center; gap: 5px;
+    }
+    .sort-tab:hover { border-color: rgba(255,255,255,0.16); color: rgba(255,255,255,0.7); }
+    .sort-tab.active { color: #fff; border-color: rgba(255,255,255,0.25); background: rgba(255,255,255,0.06); }
+    .sort-tab input[type=checkbox] { display: none; }
+
+    /* comment input */
+    .comment-input-wrap { margin-bottom: 2rem; }
+    .comment-box {
+      width: 100%; background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.08); border-radius: 12px;
+      padding: 1rem; color: #e2e2ea; font-family: 'Inter', sans-serif;
+      font-size: 0.9rem; resize: vertical; min-height: 80px;
+      transition: border-color 0.2s; outline: none; margin-bottom: 0.75rem;
+    }
+    .comment-box:focus { border-color: rgba(255,255,255,0.2); }
+    .comment-box::placeholder { color: rgba(255,255,255,0.25); }
+    .comment-submit {
+      padding: 0.6rem 1.4rem; border-radius: 8px; font-size: 0.85rem; font-weight: 500;
+      border: none; cursor: pointer; color: #fff; transition: opacity 0.2s, transform 0.2s;
+    }
+    .comment-submit:hover { opacity: 0.85; transform: translateY(-1px); }
+    .comment-submit:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
+
+    /* comment list */
+    .comment-list { display: flex; flex-direction: column; gap: 1rem; }
+    .comment-card {
+      background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 14px; padding: 1.1rem 1.25rem;
+      transition: border-color 0.2s;
+    }
+    .comment-card:hover { border-color: rgba(255,255,255,0.1); }
+    .comment-top { display: flex; align-items: center; gap: 10px; margin-bottom: 0.6rem; }
+    .comment-avatar {
+      width: 34px; height: 34px; border-radius: 50%; flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.85rem; font-weight: 700; color: #fff;
+    }
+    .comment-meta { flex: 1; }
+    .comment-username { font-size: 0.85rem; font-weight: 600; color: #fff; }
+    .comment-time { font-size: 0.72rem; color: rgba(255,255,255,0.3); margin-top: 1px; }
+    .comment-body { font-size: 0.9rem; color: rgba(255,255,255,0.65); line-height: 1.6; margin-bottom: 0.75rem; }
+    .comment-actions { display: flex; align-items: center; gap: 0.75rem; }
+    .vote-btn {
+      display: flex; align-items: center; gap: 5px;
+      padding: 0.3rem 0.75rem; border-radius: 99px; border: 1px solid rgba(255,255,255,0.08);
+      background: transparent; color: rgba(255,255,255,0.4); font-size: 0.78rem;
+      cursor: pointer; transition: all 0.2s; font-family: 'Inter', sans-serif;
+    }
+    .vote-btn:hover { border-color: rgba(255,255,255,0.2); color: rgba(255,255,255,0.8); }
+    .vote-btn.liked { border-color: rgba(74,222,128,0.4); color: #4ade80; background: rgba(74,222,128,0.06); }
+    .vote-btn.disliked { border-color: rgba(248,113,113,0.4); color: #f87171; background: rgba(248,113,113,0.06); }
+
+    .no-comments { text-align: center; padding: 3rem; color: rgba(255,255,255,0.25); font-size: 0.9rem; }
+    .loading-comments { text-align: center; padding: 2rem; color: rgba(255,255,255,0.25); font-size: 0.85rem; }
+
     footer {
-      text-align: center; padding: 2rem;
-      font-size: 0.8rem; color: rgba(255,255,255,0.2);
-      border-top: 1px solid rgba(255,255,255,0.05);
-      position: relative; z-index: 1;
+      text-align: center; padding: 2rem; font-size: 0.8rem; color: rgba(255,255,255,0.2);
+      border-top: 1px solid rgba(255,255,255,0.05); position: relative; z-index: 1;
     }
 
-    /* scroll reveal */
-    .reveal {
-      opacity: 0; transform: translateY(28px);
-      transition: opacity 0.65s ease, transform 0.65s ease;
-    }
+    .reveal { opacity: 0; transform: translateY(28px); transition: opacity 0.65s ease, transform 0.65s ease; }
     .reveal.visible { opacity: 1; transform: translateY(0); }
 
     @keyframes fadeUp {
       from { opacity: 0; transform: translateY(20px); }
       to   { opacity: 1; transform: translateY(0); }
     }
-
     @media (max-width: 640px) {
       nav { padding: 1rem 1.25rem; }
       .nav-links { display: none; }
@@ -299,46 +288,38 @@
 const CONFIG = {
 
   /* NAV */
-  navName:      "jarrah",          /* logo text */
-  navLinks: [                      /* remove any you don't want */
-    { label: "About",   href: "#about" },
-    { label: "Links",   href: "#links" },
-    { label: "Contact", href: "#contact" },
+  navName:  "jarrah",
+  navLinks: [
+    { label: "About",    href: "#about" },
+    { label: "Links",    href: "#links" },
+    { label: "Comments", href: "#comments" },
+    { label: "Contact",  href: "#contact" },
   ],
-  navCTA:       { label: "Jarrah", href: "#contact" },
+  navCTA: { label: "Jarrah", href: "#contact" },
 
   /* HERO */
-  heroBadge:    "welcome",         /* small pill text above title, or "" to hide */
-  heroStatic:   "Built for",       /* the non-cycling part of the big title */
-  heroCycleWords: [                /* words that cycle through */
-    "Jarrah",
-    "Vickery",
-    "Stewart",
-    "Today",
-  ],
-  heroSub:      "Jarrah",
+  heroBadge:      "welcome",
+  heroStatic:     "Built for",
+  heroCycleWords: ["Jarrah", "Vickery", "Stewart", "Today"],
+  heroSub:        "Jarrah",
   heroBtnPrimary:   { label: "About me", href: "#about" },
-  heroBtnSecondary: { label: "Links", href: "#links" },
+  heroBtnSecondary: { label: "Links",    href: "#links" },
+  heroImages: [],
 
-  /* HERO IMAGES (paste direct image URLs, or leave array empty to hide) */
-  heroImages: [
-    /* { url: "https://your-image-url.com/photo.jpg" }, */
-  ],
-
-  /* ACCENT / GLOW COLOURS */
-  accentColor:  "#7c5cfc",         /* main accent (buttons, glow, etc) */
-  accent2Color: "#06b6d4",         /* second orb colour */
+  /* ACCENT COLOURS */
+  accentColor:  "#7c5cfc",
+  accent2Color: "#06b6d4",
 
   /* ABOUT */
-  aboutLabel:   "About",
-  aboutTitle:   "Hey, I'm Jarrah.",
-  aboutText:    `<strong>Jarrah.</strong>`,
+  aboutLabel: "About",
+  aboutTitle: "Hey, I'm Jarrah.",
+  aboutText:  `<strong>Jarrah.</strong>`,
 
-  /* FEATURE CARDS (small cards below about — describe yourself, your skills, whatever) */
+  /* FEATURE CARDS */
   features: [
-    { icon: "✦", title: "Design",    desc: "Im a professional youtube thumbnail creator." },
-    { icon: "⌨", title: "Fast Typer",      desc: "I have an average of 213 WPS." },
-    { icon: "♪", title: "Music",     desc: "Always listening to something by 2slimey." },
+    { icon: "✦", title: "Design",     desc: "Im a professional youtube thumbnail creator." },
+    { icon: "⌨", title: "Fast Typer", desc: "I have an average of 213 WPS." },
+    { icon: "♪", title: "Music",      desc: "Always listening to something by 2slimey." },
   ],
 
   /* LINKS */
@@ -348,13 +329,41 @@ const CONFIG = {
     { icon: "🐙", label: "GitHub",    url: "https://github.com" },
     { icon: "🐦", label: "Twitter",   url: "https://twitter.com" },
     { icon: "📸", label: "Instagram", url: "https://instagram.com" },
-    { icon: "💬", label: "Pornhub",   url: "https://pornhub.com" },
+    { icon: "💬", label: "Discord",   url: "https://discord.com" },
   ],
 
-  /* CONTACT / CTA */
-  ctaTitle:   "Want to reach out?",
-  ctaSub:     "My inbox is open.",
-  ctaEmail:   "hello@jarrah.lol",
+  /* MUSIC PLAYER
+     Set enabled: true and fill in the fields to show it.
+     url: direct .mp3 link
+     art: album art image URL or "" for emoji                          */
+  music: {
+    enabled: true,
+    url:     "",               /* paste a direct .mp3 URL here */
+    title:   "Song Title",
+    artist:  "Artist Name",
+    art:     "",               /* album art URL or "" */
+    artEmoji:"🎵",
+  },
+
+  /* COMMENTS
+     binId:  your JSONBin bin ID (see setup instructions below)
+     apiKey: your JSONBin API key
+     -------------------------------------------------------
+     SETUP (free, takes 2 mins):
+     1. Go to https://jsonbin.io and sign up free
+     2. Click "Create Bin", paste in: {"comments":[]}  then save
+     3. Copy the Bin ID from the URL and paste it below
+     4. Go to API Keys, create a key, paste it below
+     ------------------------------------------------------- */
+  comments: {
+    binId:  "69b9e22ab7ec241ddc79ec68",
+    apiKey: "$2a$10$XR.jkKPJF4MoM1tXrnGXW.GWxGI5Lw5lvaNz0V/wG8mk6qy/gha.y",
+  },
+
+  /* CONTACT */
+  ctaTitle: "Want to reach out?",
+  ctaSub:   "My inbox is open.",
+  ctaEmail: "hello@jarrah.lol",
 
   /* FOOTER */
   footerText: "jarrah.lol",
@@ -364,19 +373,16 @@ const CONFIG = {
    ================================================================ */
 </script>
 
-<!-- bg -->
 <div class="grid-bg"></div>
 <div class="orb orb1" id="orb1"></div>
 <div class="orb orb2" id="orb2"></div>
 
-<!-- nav -->
 <nav>
   <div class="nav-logo" id="nav-logo"></div>
   <div class="nav-links" id="nav-links"></div>
   <a class="nav-cta" id="nav-cta" href="#"></a>
 </nav>
 
-<!-- hero -->
 <div class="hero">
   <div class="hero-badge" id="hero-badge" style="display:none">
     <div class="badge-dot" id="badge-dot"></div>
@@ -396,7 +402,6 @@ const CONFIG = {
 
 <div class="divider"></div>
 
-<!-- about -->
 <section class="about reveal" id="about">
   <p class="section-label" id="about-label"></p>
   <h2 id="about-title"></h2>
@@ -407,7 +412,6 @@ const CONFIG = {
 
 <div class="divider" style="max-width:900px;margin:0 auto"></div>
 
-<!-- links -->
 <section class="links-section reveal" id="links">
   <p class="section-label" id="links-label"></p>
   <h2 style="font-size:clamp(1.8rem,4vw,3rem);font-weight:700;letter-spacing:-1.5px;color:#fff" id="links-title"></h2>
@@ -416,10 +420,52 @@ const CONFIG = {
 
 <div class="divider" style="max-width:900px;margin:0 auto"></div>
 
-<!-- cta -->
+<!-- music -->
+<section class="music-section reveal" id="music-section" style="display:none">
+  <p class="section-label" style="margin-bottom:1rem">Now Playing</p>
+  <div class="music-player" id="music-player">
+    <div id="music-art-wrap"></div>
+    <div class="music-info">
+      <div class="music-title" id="music-title"></div>
+      <div class="music-artist" id="music-artist"></div>
+      <div class="music-progress"><div class="music-bar" id="music-bar"></div></div>
+    </div>
+    <div class="music-controls">
+      <div class="music-time" id="music-time">0:00</div>
+      <button class="music-play" id="music-play">▶</button>
+    </div>
+  </div>
+</section>
+
+<div class="divider" style="max-width:900px;margin:0 auto" id="music-divider" style="display:none"></div>
+
+<!-- comments -->
+<section class="comments-section reveal" id="comments">
+  <div class="comments-header">
+    <div>
+      <span class="comments-title">Comments</span>
+      <span class="comments-count" id="comments-count"></span>
+    </div>
+    <div class="sort-tabs">
+      <button class="sort-tab active" data-sort="newest">🕐 Newest</button>
+      <button class="sort-tab" data-sort="liked">👍 Most Liked</button>
+      <button class="sort-tab" data-sort="disliked">👎 Most Disliked</button>
+    </div>
+  </div>
+
+  <div class="comment-input-wrap">
+    <textarea class="comment-box" id="comment-box" placeholder="Leave a comment..."></textarea>
+    <button class="comment-submit" id="comment-submit">Post comment</button>
+  </div>
+
+  <div id="comment-list"></div>
+</section>
+
+<div class="divider" style="max-width:900px;margin:0 auto"></div>
+
 <section class="cta-section reveal" id="contact">
   <div class="cta-box">
-    <div class="cta-glow" id="cta-glow" style="position:absolute;inset:0;pointer-events:none;border-radius:20px;opacity:0.12;filter:blur(60px);"></div>
+    <div id="cta-glow" style="position:absolute;inset:0;pointer-events:none;border-radius:20px;opacity:0.12;filter:blur(60px);"></div>
     <h2 id="cta-title"></h2>
     <p id="cta-sub"></p>
     <a class="btn btn-primary" id="cta-btn" href="#"></a>
@@ -429,125 +475,270 @@ const CONFIG = {
 <footer id="footer"></footer>
 
 <script>
-  /* apply accent colours */
+  /* ── accent colours ── */
   document.getElementById('orb1').style.background = CONFIG.accentColor;
   document.getElementById('orb2').style.background = CONFIG.accent2Color;
   document.getElementById('cta-glow').style.background = CONFIG.accentColor;
-  document.documentElement.style.setProperty('--accent', CONFIG.accentColor);
-  document.documentElement.style.setProperty('--accent2', CONFIG.accent2Color);
 
-  /* nav */
-  const navLogo = document.getElementById('nav-logo');
-  navLogo.innerHTML = CONFIG.navName + '<span>.</span>';
-  const navLinksEl = document.getElementById('nav-links');
+  /* ── nav ── */
+  document.getElementById('nav-logo').innerHTML = CONFIG.navName + '<span>.</span>';
   CONFIG.navLinks.forEach(l => {
-    navLinksEl.innerHTML += `<a href="${l.href}">${l.label}</a>`;
+    document.getElementById('nav-links').innerHTML += `<a href="${l.href}">${l.label}</a>`;
   });
   const navCTA = document.getElementById('nav-cta');
-  navCTA.textContent = CONFIG.navCTA.label;
-  navCTA.href = CONFIG.navCTA.href;
+  navCTA.textContent = CONFIG.navCTA.label; navCTA.href = CONFIG.navCTA.href;
 
-  /* badge */
+  /* ── badge ── */
   if (CONFIG.heroBadge) {
-    const badge = document.getElementById('hero-badge');
-    badge.style.display = 'inline-flex';
+    document.getElementById('hero-badge').style.display = 'inline-flex';
     document.getElementById('badge-dot').style.background = CONFIG.accentColor;
     document.getElementById('badge-text').textContent = CONFIG.heroBadge;
   }
 
-  /* hero static text */
+  /* ── hero ── */
   document.getElementById('hero-static').textContent = CONFIG.heroStatic;
   document.getElementById('hero-sub').textContent = CONFIG.heroSub;
-
-  /* cycle words */
   const cycleWrap = document.getElementById('cycle-wrap');
   cycleWrap.style.color = CONFIG.accentColor;
   CONFIG.heroCycleWords.forEach((w, i) => {
-    const span = document.createElement('span');
-    span.className = 'cycle-word' + (i === 0 ? ' active' : '');
-    span.textContent = w;
-    cycleWrap.appendChild(span);
+    const s = document.createElement('span');
+    s.className = 'cycle-word' + (i===0?' active':'');
+    s.textContent = w; cycleWrap.appendChild(s);
   });
-  /* set width to widest word */
-  const widths = CONFIG.heroCycleWords.map(w => w.length);
-  cycleWrap.style.minWidth = Math.max(...widths) + 'ch';
-
+  cycleWrap.style.minWidth = Math.max(...CONFIG.heroCycleWords.map(w=>w.length)) + 'ch';
   let current = 0;
   setInterval(() => {
     const words = cycleWrap.querySelectorAll('.cycle-word');
-    words[current].classList.remove('active');
-    words[current].classList.add('exit');
+    words[current].classList.remove('active'); words[current].classList.add('exit');
     setTimeout(() => words[current].classList.remove('exit'), 450);
-    current = (current + 1) % words.length;
-    words[current].classList.add('active');
+    current = (current+1) % words.length; words[current].classList.add('active');
   }, 2200);
 
-  /* hero buttons */
   const btnP = document.getElementById('btn-primary');
-  btnP.textContent = CONFIG.heroBtnPrimary.label;
-  btnP.href = CONFIG.heroBtnPrimary.href;
-  btnP.style.background = CONFIG.accentColor;
-
+  btnP.textContent = CONFIG.heroBtnPrimary.label; btnP.href = CONFIG.heroBtnPrimary.href; btnP.style.background = CONFIG.accentColor;
   const btnS = document.getElementById('btn-secondary');
-  btnS.textContent = CONFIG.heroBtnSecondary.label;
-  btnS.href = CONFIG.heroBtnSecondary.href;
+  btnS.textContent = CONFIG.heroBtnSecondary.label; btnS.href = CONFIG.heroBtnSecondary.href;
 
-  /* hero images */
   const strip = document.getElementById('images-strip');
   if (CONFIG.heroImages && CONFIG.heroImages.length > 0) {
-    CONFIG.heroImages.forEach(img => {
-      strip.innerHTML += `<img class="strip-img" src="${img.url}" alt="" />`;
-    });
-  } else {
-    strip.style.display = 'none';
-  }
+    CONFIG.heroImages.forEach(img => { strip.innerHTML += `<img class="strip-img" src="${img.url}" />`; });
+  } else { strip.style.display = 'none'; }
 
-  /* about */
+  /* ── about ── */
   document.getElementById('about-label').textContent = CONFIG.aboutLabel;
   document.getElementById('about-label').style.color = CONFIG.accentColor;
   document.getElementById('about-title').textContent = CONFIG.aboutTitle;
   document.getElementById('about-body').innerHTML = CONFIG.aboutText;
 
-  /* features */
+  /* ── features ── */
   const featGrid = document.getElementById('features');
   CONFIG.features.forEach(f => {
-    featGrid.innerHTML += `
-      <div class="feat-card">
-        <div class="feat-icon">${f.icon}</div>
-        <h3>${f.title}</h3>
-        <p>${f.desc}</p>
-      </div>`;
+    featGrid.innerHTML += `<div class="feat-card"><div class="feat-icon">${f.icon}</div><h3>${f.title}</h3><p>${f.desc}</p></div>`;
   });
 
-  /* links */
+  /* ── links ── */
   document.getElementById('links-label').textContent = CONFIG.linksLabel;
   document.getElementById('links-label').style.color = CONFIG.accentColor;
   document.getElementById('links-title').textContent = CONFIG.linksTitle;
-  const linksGrid = document.getElementById('links-grid');
   CONFIG.links.forEach(l => {
-    linksGrid.innerHTML += `
-      <a class="link-card" href="${l.url}" target="_blank" rel="noopener">
-        <span class="link-icon">${l.icon}</span>${l.label}
-      </a>`;
+    document.getElementById('links-grid').innerHTML += `<a class="link-card" href="${l.url}" target="_blank" rel="noopener"><span class="link-icon">${l.icon}</span>${l.label}</a>`;
   });
 
-  /* cta */
+  /* ── music ── */
+  if (CONFIG.music.enabled) {
+    document.getElementById('music-section').style.display = 'block';
+    document.getElementById('music-divider').style.display = 'block';
+    const m = CONFIG.music;
+    document.getElementById('music-title').textContent = m.title;
+    document.getElementById('music-artist').textContent = m.artist;
+    document.getElementById('music-bar').style.background = CONFIG.accentColor;
+    const artWrap = document.getElementById('music-art-wrap');
+    artWrap.innerHTML = m.art
+      ? `<img class="music-art" src="${m.art}" />`
+      : `<div class="music-art-placeholder">${m.artEmoji}</div>`;
+
+    if (m.url) {
+      const audio = new Audio(m.url);
+      const playBtn = document.getElementById('music-play');
+      const bar = document.getElementById('music-bar');
+      const timeEl = document.getElementById('music-time');
+      let playing = false;
+      function fmt(s){const mn=Math.floor(s/60),sc=Math.floor(s%60);return mn+':'+(sc<10?'0':'')+sc;}
+      audio.addEventListener('timeupdate',()=>{if(audio.duration){bar.style.width=(audio.currentTime/audio.duration*100)+'%';timeEl.textContent=fmt(audio.currentTime);}});
+      audio.addEventListener('ended',()=>{playing=false;playBtn.textContent='▶';bar.style.width='0%';});
+      document.getElementById('music-player').addEventListener('click',()=>{
+        playing?(audio.pause(),playBtn.textContent='▶'):(audio.play(),playBtn.textContent='⏸');
+        playing=!playing;
+      });
+    }
+  }
+
+  /* ── cta ── */
   document.getElementById('cta-title').textContent = CONFIG.ctaTitle;
   document.getElementById('cta-sub').textContent = CONFIG.ctaSub;
   const ctaBtn = document.getElementById('cta-btn');
-  ctaBtn.textContent = CONFIG.ctaEmail;
-  ctaBtn.href = 'mailto:' + CONFIG.ctaEmail;
-  ctaBtn.style.background = CONFIG.accentColor;
-
-  /* footer */
-  document.getElementById('footer').textContent = '© ' + new Date().getFullYear() + ' ' + CONFIG.footerText;
+  ctaBtn.textContent = CONFIG.ctaEmail; ctaBtn.href = 'mailto:'+CONFIG.ctaEmail; ctaBtn.style.background = CONFIG.accentColor;
+  document.getElementById('footer').textContent = '© '+new Date().getFullYear()+' '+CONFIG.footerText;
   document.title = CONFIG.navName;
 
-  /* scroll reveal */
+  /* ── scroll reveal ── */
   const observer = new IntersectionObserver(entries => {
-    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); } });
+    entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('visible'); });
   }, { threshold: 0.1 });
   document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+  /* ================================================================
+     COMMENTS SYSTEM
+     ================================================================ */
+  const ADJECTIVES = ['Silent','Cosmic','Swift','Neon','Frozen','Blazing','Hollow','Ancient','Electric','Midnight','Golden','Savage','Crimson','Phantom','Wandering'];
+  const NOUNS = ['Panda','Falcon','Viper','Ghost','Wolf','Phoenix','Raven','Tiger','Cobra','Shark','Eagle','Lynx','Drake','Mantis','Specter'];
+  const AVATAR_COLORS = ['#7c5cfc','#06b6d4','#f97316','#ec4899','#10b981','#f59e0b','#6366f1','#14b8a6','#ef4444','#8b5cf6'];
+
+  function getOrCreateUser() {
+    let user = JSON.parse(localStorage.getItem('jarrah_user') || 'null');
+    if (!user) {
+      const adj = ADJECTIVES[Math.floor(Math.random()*ADJECTIVES.length)];
+      const noun = NOUNS[Math.floor(Math.random()*NOUNS.length)];
+      const num = Math.floor(Math.random()*9000)+1000;
+      const color = AVATAR_COLORS[Math.floor(Math.random()*AVATAR_COLORS.length)];
+      const initials = adj[0]+noun[0];
+      user = { username: `${adj}${noun}${num}`, color, initials, id: Date.now().toString(36)+Math.random().toString(36).slice(2) };
+      localStorage.setItem('jarrah_user', JSON.stringify(user));
+    }
+    return user;
+  }
+
+  function timeAgo(ts) {
+    const diff = Date.now() - ts;
+    const mins = Math.floor(diff/60000);
+    if (mins < 1) return 'just now';
+    if (mins < 60) return `${mins}m ago`;
+    const hrs = Math.floor(mins/60);
+    if (hrs < 24) return `${hrs}h ago`;
+    return `${Math.floor(hrs/24)}d ago`;
+  }
+
+  const BIN_URL = `https://api.jsonbin.io/v3/b/${CONFIG.comments.binId}`;
+  const HEADERS = { 'Content-Type': 'application/json', 'X-Master-Key': CONFIG.comments.apiKey };
+
+  let allComments = [];
+  let sortMode = 'newest';
+  const user = getOrCreateUser();
+  const voted = JSON.parse(localStorage.getItem('jarrah_voted') || '{}');
+
+  async function fetchComments() {
+    const list = document.getElementById('comment-list');
+    list.innerHTML = '<div class="loading-comments">Loading comments...</div>';
+    try {
+      const res = await fetch(BIN_URL+'/latest', { headers: { 'X-Master-Key': CONFIG.comments.apiKey } });
+      const data = await res.json();
+      allComments = data.record.comments || [];
+      renderComments();
+    } catch(e) {
+      list.innerHTML = '<div class="no-comments">Couldn\'t load comments. Check your JSONBin config.</div>';
+    }
+  }
+
+  async function saveComments() {
+    await fetch(BIN_URL, {
+      method: 'PUT', headers: HEADERS,
+      body: JSON.stringify({ comments: allComments })
+    });
+  }
+
+  function renderComments() {
+    const list = document.getElementById('comment-list');
+    let sorted = [...allComments];
+    if (sortMode === 'liked')    sorted.sort((a,b) => (b.likes||0)-(a.likes||0));
+    if (sortMode === 'disliked') sorted.sort((a,b) => (b.dislikes||0)-(a.dislikes||0));
+    if (sortMode === 'newest')   sorted.sort((a,b) => b.ts-a.ts);
+
+    document.getElementById('comments-count').textContent = `(${allComments.length})`;
+
+    if (sorted.length === 0) {
+      list.innerHTML = '<div class="no-comments">No comments yet. Be the first!</div>';
+      return;
+    }
+
+    list.innerHTML = sorted.map(c => {
+      const myVote = voted[c.id];
+      return `
+        <div class="comment-card" data-id="${c.id}">
+          <div class="comment-top">
+            <div class="comment-avatar" style="background:${c.color}">${c.initials}</div>
+            <div class="comment-meta">
+              <div class="comment-username">${c.username}</div>
+              <div class="comment-time">${timeAgo(c.ts)}</div>
+            </div>
+          </div>
+          <div class="comment-body">${c.text}</div>
+          <div class="comment-actions">
+            <button class="vote-btn ${myVote==='like'?'liked':''}" onclick="vote('${c.id}','like')">👍 ${c.likes||0}</button>
+            <button class="vote-btn ${myVote==='dislike'?'disliked':''}" onclick="vote('${c.id}','dislike')">👎 ${c.dislikes||0}</button>
+          </div>
+        </div>`;
+    }).join('');
+  }
+
+  window.vote = async function(id, type) {
+    const c = allComments.find(c => c.id === id);
+    if (!c) return;
+    const prev = voted[id];
+    if (prev === type) {
+      // undo
+      if (type === 'like') c.likes = Math.max(0, (c.likes||0)-1);
+      else c.dislikes = Math.max(0, (c.dislikes||0)-1);
+      delete voted[id];
+    } else {
+      // undo previous if switching
+      if (prev === 'like') c.likes = Math.max(0, (c.likes||0)-1);
+      if (prev === 'dislike') c.dislikes = Math.max(0, (c.dislikes||0)-1);
+      // apply new
+      if (type === 'like') c.likes = (c.likes||0)+1;
+      else c.dislikes = (c.dislikes||0)+1;
+      voted[id] = type;
+    }
+    localStorage.setItem('jarrah_voted', JSON.stringify(voted));
+    renderComments();
+    await saveComments();
+  };
+
+  /* sort tabs */
+  document.querySelectorAll('.sort-tab').forEach(tab => {
+    tab.addEventListener('click', () => {
+      document.querySelectorAll('.sort-tab').forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
+      sortMode = tab.dataset.sort;
+      renderComments();
+    });
+  });
+
+  /* post comment */
+  const submitBtn = document.getElementById('comment-submit');
+  submitBtn.style.background = CONFIG.accentColor;
+  submitBtn.addEventListener('click', async () => {
+    const box = document.getElementById('comment-box');
+    const text = box.value.trim();
+    if (!text) return;
+    submitBtn.disabled = true; submitBtn.textContent = 'Posting...';
+    const comment = {
+      id: Date.now().toString(36)+Math.random().toString(36).slice(2),
+      username: user.username, color: user.color, initials: user.initials,
+      text, ts: Date.now(), likes: 0, dislikes: 0,
+    };
+    allComments.push(comment);
+    box.value = '';
+    renderComments();
+    await saveComments();
+    submitBtn.disabled = false; submitBtn.textContent = 'Post comment';
+  });
+
+  /* load comments if configured */
+  if (CONFIG.comments.binId !== 'YOUR_BIN_ID_HERE') {
+    fetchComments();
+  } else {
+    document.getElementById('comment-list').innerHTML = '<div class="no-comments">Set up JSONBin in the CONFIG to enable comments.</div>';
+  }
 </script>
 </body>
 </html>
