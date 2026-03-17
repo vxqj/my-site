@@ -18,7 +18,24 @@
     a { color: inherit; text-decoration: none; }
     img { max-width: 100%; display: block; border-radius: 12px; }
 
-    .grid-bg {
+    #splash {
+      position: fixed; inset: 0; z-index: 999;
+      background: #04040a;
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer;
+      transition: opacity 0.6s ease, visibility 0.6s ease;
+    }
+    #splash.hidden { opacity: 0; visibility: hidden; pointer-events: none; }
+    #splash-text {
+      font-family: 'Inter', sans-serif; font-weight: 700;
+      letter-spacing: -1px; color: #fff;
+      animation: pulse 2s ease-in-out infinite;
+      user-select: none;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50%       { opacity: 0.4; transform: scale(0.97); }
+    }
       position: fixed; inset: 0; z-index: 0; pointer-events: none;
       background-image:
         linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
@@ -306,7 +323,9 @@ const CONFIG = {
   heroBtnSecondary: { label: "Links",    href: "#links" },
   heroImages: [],
 
-  /* ACCENT COLOURS */
+  /* SPLASH SCREEN */
+  splashText: "click to enter.",   /* text shown on splash */
+  splashSize: "clamp(2rem, 8vw, 4rem)",
   accentColor:  "#7c5cfc",
   accent2Color: "#06b6d4",
 
@@ -329,7 +348,7 @@ const CONFIG = {
     { icon: "🐙", label: "GitHub",    url: "https://github.com" },
     { icon: "🐦", label: "Twitter",   url: "https://twitter.com" },
     { icon: "📸", label: "Instagram", url: "https://instagram.com" },
-    { icon: "💬", label: "Pornhub",   url: "https://goon.com" },
+    { icon: "💬", label: "Discord",   url: "https://discord.com" },
   ],
 
   /* MUSIC PLAYER
@@ -372,6 +391,8 @@ const CONFIG = {
    END CONFIG
    ================================================================ */
 </script>
+
+<div id="splash"><span id="splash-text"></span></div>
 
 <div class="grid-bg"></div>
 <div class="orb orb1" id="orb1"></div>
@@ -475,6 +496,21 @@ const CONFIG = {
 <footer id="footer"></footer>
 
 <script>
+  /* ── splash ── */
+  const splashEl = document.getElementById('splash-text');
+  splashEl.textContent = CONFIG.splashText;
+  splashEl.style.fontSize = CONFIG.splashSize;
+  document.getElementById('splash').addEventListener('click', () => {
+    document.getElementById('splash').classList.add('hidden');
+    if (window._splashAudio) {
+      window._splashAudio.play().then(() => {
+        window._splashPlaying = true;
+        const btn = document.getElementById('music-play');
+        if (btn) btn.textContent = '⏸';
+      }).catch(()=>{});
+    }
+  });
+
   /* ── accent colours ── */
   document.getElementById('orb1').style.background = CONFIG.accentColor;
   document.getElementById('orb2').style.background = CONFIG.accent2Color;
@@ -560,19 +596,20 @@ const CONFIG = {
     if (m.url) {
       const audio = new Audio(m.url);
       audio.loop = true;
+      window._splashAudio = audio;
+      window._splashPlaying = false;
       const playBtn = document.getElementById('music-play');
       const bar = document.getElementById('music-bar');
       const timeEl = document.getElementById('music-time');
-      let playing = false;
       function fmt(s){const mn=Math.floor(s/60),sc=Math.floor(s%60);return mn+':'+(sc<10?'0':'')+sc;}
       audio.addEventListener('timeupdate',()=>{if(audio.duration){bar.style.width=(audio.currentTime/audio.duration*100)+'%';timeEl.textContent=fmt(audio.currentTime);}});
-      // autoplay — browsers block autoplay until user interacts, so we try immediately then retry on first click
-      const tryPlay = () => { audio.play().then(()=>{ playing=true; playBtn.textContent='⏸'; }).catch(()=>{}); };
-      tryPlay();
-      document.addEventListener('click', () => { if(!playing){ tryPlay(); } }, { once: true });
       document.getElementById('music-player').addEventListener('click', e => {
         e.stopPropagation();
-        playing ? (audio.pause(), playBtn.textContent='▶', playing=false) : (audio.play(), playBtn.textContent='⏸', playing=true);
+        if (window._splashPlaying) {
+          audio.pause(); playBtn.textContent='▶'; window._splashPlaying=false;
+        } else {
+          audio.play(); playBtn.textContent='⏸'; window._splashPlaying=true;
+        }
       });
     }
   }
