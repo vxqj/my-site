@@ -338,10 +338,10 @@ const CONFIG = {
      art: album art image URL or "" for emoji                          */
   music: {
     enabled: true,
-    url:     "https://files.catbox.moe/dzeqoz.mp3",               /* paste a direct .mp3 URL here */
+    url:     "https://files.catbox.moe/dzeqoz.mp3",
     title:   "Jarrah Got No Game",
     artist:  "DJ WillyBum",
-    art:     "",               /* album art URL or "" */
+    art:     "",
     artEmoji:"🎵",
   },
 
@@ -559,16 +559,20 @@ const CONFIG = {
 
     if (m.url) {
       const audio = new Audio(m.url);
+      audio.loop = true;
       const playBtn = document.getElementById('music-play');
       const bar = document.getElementById('music-bar');
       const timeEl = document.getElementById('music-time');
       let playing = false;
       function fmt(s){const mn=Math.floor(s/60),sc=Math.floor(s%60);return mn+':'+(sc<10?'0':'')+sc;}
       audio.addEventListener('timeupdate',()=>{if(audio.duration){bar.style.width=(audio.currentTime/audio.duration*100)+'%';timeEl.textContent=fmt(audio.currentTime);}});
-      audio.addEventListener('ended',()=>{playing=false;playBtn.textContent='▶';bar.style.width='0%';});
-      document.getElementById('music-player').addEventListener('click',()=>{
-        playing?(audio.pause(),playBtn.textContent='▶'):(audio.play(),playBtn.textContent='⏸');
-        playing=!playing;
+      // autoplay — browsers block autoplay until user interacts, so we try immediately then retry on first click
+      const tryPlay = () => { audio.play().then(()=>{ playing=true; playBtn.textContent='⏸'; }).catch(()=>{}); };
+      tryPlay();
+      document.addEventListener('click', () => { if(!playing){ tryPlay(); } }, { once: true });
+      document.getElementById('music-player').addEventListener('click', e => {
+        e.stopPropagation();
+        playing ? (audio.pause(), playBtn.textContent='▶', playing=false) : (audio.play(), playBtn.textContent='⏸', playing=true);
       });
     }
   }
