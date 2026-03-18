@@ -346,10 +346,10 @@ const CONFIG = {
   linksLabel: "Find me",
   linksTitle: "Links & socials",
   links: [
-    { icon: "🐙", label: "???",    url: "" },
-    { icon: "🐦", label: "???",   url: "" },
-    { icon: "📸", label: "???", url: "" },
-    { icon: "💬", label: "???",   url: "" },
+    { icon: "?", label: "???", url: "https://jarrah.lol" },
+    { icon: "?", label: "???", url: "https://jarrah.lol" },
+    { icon: "?", label: "???", url: "https://jarrah.lol" },
+    { icon: "?", label: "???", url: "https://jarrah.lol" },
   ],
 
   /* MUSIC PLAYER
@@ -376,8 +376,8 @@ const CONFIG = {
      4. Go to API Keys, create a key, paste it below
      ------------------------------------------------------- */
   comments: {
-    binId:  "69b9e22ab7ec241ddc79ec68",
-    apiKey: "$2a$10$VxVowDXRB4.gwROOLAeNteP0HVfVr2VKw0k/fvuICV830TKIOjwje",
+    binId:  "69b9f2b5c3097a1dd534e372",
+    apiKey: "$2a$10$1z6Z6h9r32TV9JA2iOQQFua0X/rwlq9tmeXOrhZ1gvOFdacx.Mjzy",
   },
 
   /* CONTACT */
@@ -661,7 +661,7 @@ const CONFIG = {
   }
 
   const BIN_URL = `https://api.jsonbin.io/v3/b/${CONFIG.comments.binId}`;
-  const HEADERS = { 'Content-Type': 'application/json', 'X-Master-Key': CONFIG.comments.apiKey };
+  const HEADERS = { 'Content-Type': 'application/json', 'X-Master-Key': CONFIG.comments.apiKey, 'X-Access-Key': CONFIG.comments.apiKey };
 
   let allComments = [];
   let sortMode = 'newest';
@@ -672,7 +672,7 @@ const CONFIG = {
     const list = document.getElementById('comment-list');
     list.innerHTML = '<div class="loading-comments">Loading comments...</div>';
     try {
-      const res = await fetch(BIN_URL+'/latest', { headers: { 'X-Master-Key': CONFIG.comments.apiKey } });
+      const res = await fetch(BIN_URL+'/latest', { headers: { 'X-Master-Key': CONFIG.comments.apiKey, 'X-Access-Key': CONFIG.comments.apiKey } });
       const data = await res.json();
       allComments = data.record.comments || [];
       renderComments();
