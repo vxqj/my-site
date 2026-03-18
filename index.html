@@ -377,7 +377,7 @@ const CONFIG = {
      ------------------------------------------------------- */
   comments: {
     binId:  "69b9f2b5c3097a1dd534e372",
-    apiKey: "$2a$10$lpgTA1alsLNoJIYSxxnHtO01GQq7fDbYfJvgAwt9NuT92AFUqZaP.",
+    apiKey: "$2a$10$3YFTltUI80BRLDjbHVLy3usV57ngcgE20zg4NYFmnd7C//ncqebR.",
   },
 
   /* CONTACT */
@@ -661,7 +661,7 @@ const CONFIG = {
   }
 
   const BIN_URL = `https://api.jsonbin.io/v3/b/${CONFIG.comments.binId}`;
-  const HEADERS = { 'Content-Type': 'application/json', 'X-Master-Key': CONFIG.comments.apiKey, 'X-Access-Key': CONFIG.comments.apiKey };
+  const HEADERS = { 'Content-Type': 'application/json', 'X-Master-Key': CONFIG.comments.apiKey };
 
   let allComments = [];
   let sortMode = 'newest';
@@ -672,7 +672,7 @@ const CONFIG = {
     const list = document.getElementById('comment-list');
     list.innerHTML = '<div class="loading-comments">Loading comments...</div>';
     try {
-      const res = await fetch(BIN_URL+'/latest', { headers: { 'X-Master-Key': CONFIG.comments.apiKey, 'X-Access-Key': CONFIG.comments.apiKey } });
+      const res = await fetch(BIN_URL+'/latest', { headers: { 'X-Master-Key': CONFIG.comments.apiKey } });
       const data = await res.json();
       allComments = data.record.comments || [];
       renderComments();
