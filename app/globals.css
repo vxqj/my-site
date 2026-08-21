@@ -1,0 +1,71 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+  box-sizing: border-box;
+}
+
+html, body {
+  background: #05060f;
+  color: #eef1ff;
+  min-height: 100%;
+}
+
+body {
+  position: relative;
+  isolation: isolate;
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -2;
+  background:
+    radial-gradient(circle at 18% 15%, rgba(76, 243, 255, 0.10), transparent 40%),
+    radial-gradient(circle at 85% 78%, rgba(255, 95, 196, 0.10), transparent 45%),
+    radial-gradient(circle at 50% 50%, #0a0d20 0%, #05060f 75%);
+}
+
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  pointer-events: none;
+  mix-blend-mode: overlay;
+  background: repeating-linear-gradient(
+    to bottom,
+    rgba(255, 255, 255, 0.02) 0px,
+    rgba(255, 255, 255, 0.02) 1px,
+    transparent 1px,
+    transparent 3px
+  );
+}
+
+::selection {
+  background: #4cf3ff;
+  color: #05060f;
+}
+
+.glow-text {
+  background: linear-gradient(90deg, #4cf3ff, #ff5fc4 60%, #ffcb47);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.panel-glass {
+  background: rgba(16, 19, 43, 0.72);
+  backdrop-filter: blur(10px);
+  border: 1px solid #2a2f5c;
+}
+
+@keyframes float-slow {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+}
+.float-slow {
+  animation: float-slow 6s ease-in-out infinite;
+}
